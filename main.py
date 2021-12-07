@@ -1,19 +1,20 @@
 import math
+from typing import Tuple
 import numpy as np
 import time
 from plotly.basedatatypes import BaseLayoutType
 import plotly.graph_objects as go
 import numpy as np
 
-def sfery(rozmiar,kolory,odleglosc = 0,przesuniecie = 0): #rozmiar to                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              promien, odleglosc to odlegosc od srodka ukladu czyli srodka slonca
+def sfery(rozmiar,kolory,odleglosc = 0,przesuniecie = 0): #promien, odleglosc to odlegosc od srodka ukladu czyli srodka slonca
     #Ustawiam by każda sfera złożona była ze 100 punktów
-    theta = np.linspace(0,2*np.pi,100)
-    phi = np.linspace(0,np.pi,100)
+    theta = np.linspace(0,2*np.pi,15)
+    phi = np.linspace(0,np.pi,15)
 
     #Ustawianie współrzędnych punktów z których tworzona jest sfera
-    x0 = -(przesuniecie+10) + odleglosc + rozmiar*np.outer(np.cos(theta),np.sin(phi))
-    y0 = przesuniecie + rozmiar*np.outer(np.sin(theta),np.sin(phi))
-    z0 = rozmiar*np.outer(np.ones(100),np.cos(phi))
+    x0 = odleglosc + rozmiar*np.outer(np.cos(theta),np.sin(phi)) - float(przesuniecie)
+    y0 = rozmiar*np.outer(np.sin(theta),np.sin(phi)) - float(przesuniecie)
+    z0 = rozmiar*np.outer(np.ones(15),np.cos(phi))
 
     #Tworzenie linii ruchu
     tor = go.Surface(x=x0, y=y0, z=z0, colorscale=[[0,kolory],[1,kolory]])
@@ -56,8 +57,8 @@ layout = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=0,r=0,t
                     type = 'buttons',
                     buttons = [dict(label = 'Play',
                     method = 'animate',
-                    args = [None]),
-                            {"args": [[None], {"frame": {"duration": 0, "redraw": False},
+                    args = [None, {"frame": {"duration": 0.000000000005, "redraw": True},"fromcurrent": True, "transition": {"duration": 0.0000000000000000000005}}]),
+                            {"args": [[None], {"frame": {"duration": 0, "redraw": True},
                                   "mode": "immediate",
                                   "transition": {"duration": 0}}],
                 "label": "Pause",
@@ -69,7 +70,7 @@ fig = go.Figure(data = [trace0,trace1,trace11,trace2,trace12,trace3,trace13],
                 layout = layout,
                 frames=[go.Frame(data = [trace0,trace1,trace2,sfery(promien[3],'#325bff',odleglosc_od_slonca[3],k),trace11,trace12,trace13,
                 ])
-                        for k in range(0,150,1)])
+                        for k in range(0,155,5)])
 #fig.add_traces([trace11,trace12,trace13])
 #fig.update_traces(patch = dict(y = y+5),selector = dict(trace1,trace2,trace3))
 fig.show()
