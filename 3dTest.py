@@ -10,27 +10,22 @@ import plotly.io as pio
 
 
 class Planeta:
-    phi = np.linspace(0, 2 * np.pi, 15)
-    theta = np.linspace(0, np.pi, 15)
-    def __init__(self,nazwa,rozmiar,odleglosc,kolor,xcords,ycords,przesuniecie_x = 0,przesuniecie_y = 0):
+    def __init__(self,nazwa,rozmiar,odleglosc,kolor,przesuniecie_x = 0,przesuniecie_y = 0):
         self.nazwa = nazwa
         self.rozmiar = rozmiar
         self.odleglosc_od_slonca = odleglosc
         self.kolory = kolor
         self.zmianax = przesuniecie_x
         self.zmianay = przesuniecie_y
-        #self.x_cords = self.odleglosc_od_slonca + self.rozmiar * np.outer(np.cos(self.phi), np.sin(self.theta)) + self.zmianax
-        #self.y_cords = self.rozmiar * np.outer(np.sin(self.phi), np.sin(self.theta)) + self.zmianay
-        self.x_cords = xcords
-        self.y_cords = ycords
-        self.z_cords = 3 + self.rozmiar * np.outer(np.ones(15), np.cos(self.theta))
-    def zmianaPozycji(self,x = 0 ,y = 0):
-        self.zmianax = x
-        self.zmianay = y
 
     def Generacja_Planety(self):
-
-        Planeta = go.Surface(x=self.x_cords, y=self.y_cords, z=self.z_cords, colorscale=[[0, self.kolory], [1, self.kolory]])
+        phi = np.linspace(0, 2 * np.pi, 15)
+        theta = np.linspace(0, np.pi, 15)
+        x_cords = self.odleglosc_od_slonca + self.rozmiar * np.outer(np.cos(phi), np.sin(theta)) + self.zmianax  # macierz współrzędnych x
+        y_cords = self.rozmiar * np.outer(np.sin(phi), np.sin(theta)) + self.zmianay  # macierz współrzędnych y
+        z_cords = 3+ self.rozmiar * np.outer(np.ones(15), np.cos(theta))
+        Planeta = go.Surface(x=x_cords, y=y_cords, z=z_cords, colorscale=[[0, self.kolory], [1, self.kolory]])
+        print(y_cords[11][0])
         Planeta.update(showscale=False)
         return Planeta
     def Generacja_Orbity(self,offset = 2,clr = 'black',wdth = 2):
@@ -45,18 +40,16 @@ class Planeta:
             zcord = zcord + [0]
         orbita = go.Scatter3d(x=xcord, y=ycord, z=zcord, marker=dict(size=0.1), line=dict(color=clr, width=wdth))
         return orbita
-
-
 Slonce = Planeta("Słońce",25,0,"#FFFF00").Generacja_Planety()
 Ziemia = Planeta("Ziemia",5,50,"#10f2c3")
 Orbita_Ziemi = Ziemia.Generacja_Orbity()
 zmiany_pozycji = []
-for i in range(1,100):
-    zmiany_pozycji.append(Planeta("Ziemia",5,50,"#10f2c3",i,i).Generacja_Planety())
+#for i in range(1,100):
+ #   zmiany_pozycji.append(Planeta("Ziemia",5,50,"#10f2c3",i,i).Generacja_Planety())
 klatki = []
-for i in range(0,50):
-    klatki.append(go.Frame(data=[Slonce,zmiany_pozycji[i]]))
-zmiany_pozycji.append(Slonce)
+#for i in range(0,50):
+ #   klatki.append(go.Frame(data=[Slonce,zmiany_pozycji[i]]))
+#zmiany_pozycji.append(Slonce)
 
 lay = go.Layout(title="Objektowy solar System", autosize = True, margin = dict(l=2,r=2,b=2,t=2),
                   updatemenus=[dict(
@@ -73,7 +66,7 @@ lay = go.Layout(title="Objektowy solar System", autosize = True, margin = dict(l
                                 "method": "animate"}
                                ])])
 
-fig = go.Figure(data = [Slonce,Ziemia.Generacja_Planety(),Orbita_Ziemi],layout=lay,frames=klatki)
+fig = go.Figure(data = [Slonce,Ziemia.Generacja_Planety(),Orbita_Ziemi],layout=lay)
 
 
 fig.write_html('tmp.html', auto_open=False)
