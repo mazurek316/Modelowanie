@@ -10,18 +10,19 @@ import scipy.constants
 
 
 class Planeta:
-    def __init__(self,nazwa,rozmiar,odleglosc,kolor,przesuniecie_x = 0,przesuniecie_y = 0):
+    def __init__(self,nazwa,rozmiar,odleglosc,kolor,przesuniecie_y = 0):
         self.nazwa = nazwa
         self.rozmiar = rozmiar
         self.odleglosc_od_slonca = odleglosc
         self.kolory = kolor
-        self.zmianax = przesuniecie_x
         self.zmianay = przesuniecie_y
-
+        self.predkosc = (np.pi*2*50)/10
+        self.srodek_x = odleglosc
+        self.srodek_y = 0
     def Generacja_Planety(self):
         phi = np.linspace(0, 2 * np.pi, 15)
         theta = np.linspace(0, np.pi, 15)
-        self.x_cords = self.odleglosc_od_slonca + self.rozmiar * np.outer(np.cos(phi), np.sin(theta)) + self.zmianax  # macierz współrzędnych x
+        self.x_cords = self.odleglosc_od_slonca + self.rozmiar * np.outer(np.cos(phi), np.sin(theta)) # macierz współrzędnych x
         self.y_cords = self.rozmiar * np.outer(np.sin(phi), np.sin(theta)) + self.zmianay  # macierz współrzędnych y
         self.z_cords = 3+ self.rozmiar * np.outer(np.ones(15), np.cos(theta))
         Planeta = go.Surface(x=self.x_cords, y=self.y_cords, z=self.z_cords, colorscale=[[0, self.kolory], [1, self.kolory]])
@@ -35,7 +36,7 @@ class Planeta:
         return self.srodek_x
     def y_dumper(self):
         return self.srodek_y
-    def Generacja_Orbity(self,offset = 2,clr = 'black',wdth = 2):
+    def Generacja_Orbity(self,offset = 1,clr = 'black',wdth = 2):
         xcord = []
         ycord = []
         zcord = []
@@ -44,7 +45,7 @@ class Planeta:
         for i in range(0, 361):  # dla każdego stopnia
             xcord = xcord + [(round(np.cos(math.radians(i)), 5)) * self.odleglosc_od_slonca + offset]
             ycord = ycord + [(round(np.sin(math.radians(i)), 5)) * self.odleglosc_od_slonca]
-            zcord = zcord + [0]
+            zcord = zcord + [3]
         orbita = go.Scatter3d(x=xcord, y=ycord, z=zcord, marker=dict(size=0.1), line=dict(color=clr, width=wdth))
         return orbita
 
@@ -85,10 +86,7 @@ class Planeta:
         return 0
     ##############################
 
-Slonce = Planeta("Słońce",25,0,"#FFFF00").Generacja_Planety()
-Ziemia = Planeta("Ziemia",5,50,"#10f2c3")
-Orbita_Ziemi = Ziemia.Generacja_Orbity()
-zmiany_pozycji = []
+
 
 def sila_grawitacji(x1, x2, y1, y2):
     G = scipy.constants.gravitational_constant
@@ -131,20 +129,56 @@ def sila_grawitacji(x1, x2, y1, y2):
 
 x2 = 0
 y2 = 0
-for i in range(1,100):
-    erth = Planeta("Ziemia",5,50,"#10f2c3",i,i)
-    zmiany_pozycji.append(erth.Generacja_Planety())                       #poruszanie się
-    x1 = erth.x_dumper()
-    y1 = erth.y_dumper()
-    tmp = sila_grawitacji(x1, 0, y1, 0)
-    print(tmp)
+#for i in range(1,100):
+ #   erth = Planeta("Ziemia",5,50,"#10f2c3",i,i)
+  #  zmiany_pozycji.append(erth.Generacja_Planety())                       #poruszanie się
+   # x1 = erth.x_dumper()
+    #y1 = erth.y_dumper()
+    #tmp = sila_grawitacji(x1, 0, y1, 0)
+    #print(tmp)
+
+
+
+
+
+
+promien_km = [200000,4878,12104,12756]
+promien = [((i / 12756)*2) for i in promien_km]
+odleglosc_od_slonca = [0,57.9,108.2,149.6,227.9]
+Slonce = Planeta("Słońce",promien[0],odleglosc_od_slonca[0],"#FFFF00").Generacja_Planety()
+Merkury = Planeta("Merkury",promien[1],odleglosc_od_slonca[1],'#87877d')
+Wenus = Planeta("Wenus",promien[2],odleglosc_od_slonca[2],'#d23100')
+Ziemia = Planeta("Ziemia",promien[3],odleglosc_od_slonca[3],"#10f2c3")
+
+Orbita_Ziemi = Ziemia.Generacja_Orbity()
+Orbita_Merkury = Merkury.Generacja_Orbity()
+Orbita_Wenus = Wenus.Generacja_Orbity()
+zmiany_pozycji = {"Merkury":[],"Wenus":[],"Ziemia":[]}
+
+
+for i in range(0,50):
+    time = i*0.2
+    x_merkury = odleglosc_od_slonca[1]*np.cos(0.829545454*np.pi*time + np.pi/2)
+    y_merkury = odleglosc_od_slonca[1]*np.sin(0.829545454*np.pi*time + np.pi/2)
+    x_wenus = odleglosc_od_slonca[2]*np.sin(0.324444444*np.pi*time + np.pi/2)
+    y_wenus = odleglosc_od_slonca[2]*np.cos(0.324444444*np.pi*time + np.pi/2)
+    x_ziemi = odleglosc_od_slonca[3]*np.cos(0.2 * np.pi * time + np.pi / 2)
+    y_ziemi = odleglosc_od_slonca[3]*np.sin(0.2 * np.pi * time + np.pi / 2)
+    #print(x_ziemi,y_ziemi)
+    merkury_tmp = Planeta("Merkury",promien[1],x_merkury,'#87877d',y_merkury)
+    wenus_tmp = Planeta("Wenus",promien[2],x_wenus,'#d23100',y_wenus)
+    erth_tmp = Planeta("Ziemia", promien[3],x_ziemi, "#10f2c3",y_ziemi)
+    #print(x_wenus,y_wenus)
+    zmiany_pozycji["Merkury"].append(merkury_tmp.Generacja_Planety())
+    zmiany_pozycji["Wenus"].append(wenus_tmp.Generacja_Planety())
+    zmiany_pozycji["Ziemia"].append(erth_tmp.Generacja_Planety())
 
 klatki = []
 for i in range(0,50):
-    klatki.append(go.Frame(data=[Slonce,zmiany_pozycji[i]]))
-zmiany_pozycji.append(Slonce)
+    klatki.append(go.Frame(data=[Slonce,zmiany_pozycji["Merkury"][i],zmiany_pozycji["Wenus"][i],zmiany_pozycji["Ziemia"][i]]))
 
-lay = go.Layout(title="Objektowy solar System", autosize = True, margin = dict(l=2,r=2,b=2,t=2),
+
+'''lay = go.Layout(title="Objektowy solar System", autosize = False, margin = dict(l=2,r=2,b=2,t=2),
                   updatemenus=[dict(
                       type='buttons',
                       buttons=[dict(label='Play',
@@ -157,9 +191,24 @@ lay = go.Layout(title="Objektowy solar System", autosize = True, margin = dict(l
                                                   "transition": {"duration": 0}}],
                                 "label": "Pause",
                                 "method": "animate"}
-                               ])])
+                               ])])'''
+lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=2,r=2,t=2,b=2),autosize=False,width=1920,height=1080,
+    scene= dict(xaxis = dict(title = 'odleglosc od slonca',range = [-600,600],color = 'black'),
+                yaxis = dict(title = 'odleglosc od slonca',range = [-600,600],color = 'black'),
+                zaxis = dict(range = [-600,600],color = 'white')),
+                updatemenus = [dict(
+                    type = 'buttons',
+                    buttons = [dict(label = 'Play',
+                    method = 'animate',
+                    args = [None, {"frame": {"duration": 1, "redraw": True},"fromcurrent": True, "transition": {"duration": 0.2}}]),
+                            {"args": [[None], {"frame": {"duration": 0, "redraw": True},
+                                  "mode": "immediate",
+                                  "transition": {"duration": 0}}],
+                "label": "Pause",
+                "method": "animate"}
+                    ])])
 
-fig = go.Figure(data = [Slonce,Ziemia.Generacja_Planety(),Orbita_Ziemi],layout=lay, frames=klatki)
+fig = go.Figure(data = [Slonce,Merkury.Generacja_Planety(),Wenus.Generacja_Planety(),Ziemia.Generacja_Planety(),Merkury.Generacja_Orbity(),Wenus.Generacja_Orbity(),Ziemia.Generacja_Orbity()],layout=lay, frames=klatki)
 
 
 fig.write_html('tmp.html', auto_open=False)
