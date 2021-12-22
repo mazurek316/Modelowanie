@@ -212,20 +212,7 @@ for i in range(0,50):
                                  zmiany_pozycji["Neptun"][i]]))
 
 
-'''lay = go.Layout(title="Objektowy solar System", autosize = False, margin = dict(l=2,r=2,b=2,t=2),
-                  updatemenus=[dict(
-                      type='buttons',
-                      buttons=[dict(label='Play',
-                                    method='animate',
-                                    args=[None,
-                                          {"frame": {"duration": 0.5, "redraw": True}, "fromcurrent": True,
-                                           "transition": {"duration": 0.2}}]),
-                               {"args": [[None], {"frame": {"duration": 0, "redraw": False},
-                                                  "mode": "immediate",
-                                                  "transition": {"duration": 0}}],
-                                "label": "Pause",
-                                "method": "animate"}
-                               ])])'''
+
 lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=2,r=2,t=2,b=2),autosize=False,width=1920,height=1080,
     scene= dict(xaxis = dict(title = 'odleglosc od slonca',range = [-7000,7000],color = 'black'),
                 yaxis = dict(title = 'odleglosc od slonca',range = [-7000,7000],color = 'black'),
