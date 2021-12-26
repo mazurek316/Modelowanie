@@ -1,6 +1,5 @@
 import math
 from typing import Tuple
-import numpy as np
 import time
 from plotly.basedatatypes import BaseLayoutType
 import plotly.graph_objects as go
@@ -17,7 +16,7 @@ def sfery(rozmiar,kolory,odleglosc = 0,przesuniecie = 0): #promien, odleglosc to
     z0 = rozmiar*np.outer(np.ones(15),np.cos(phi))
 
     #Tworzenie linii ruchu
-    tor = go.Surface(x=x0, y=y0, z=z0, colorscale=[[0,kolory],[1,kolory]])
+    tor = go.Surface(x=x0, y=y0, z=z0, colorscale=[[0,kolory],[1,kolory]]) #test zmian
     tor.update(showscale=False)
     return tor
 def orbity(odleglosc,offset=2,clr='black',wdth=5):
@@ -40,10 +39,10 @@ trace0 = sfery(promien[0],'#ffff00',odleglosc_od_slonca[0]) #Słońce
 trace1 = sfery(promien[1],'#87877d',odleglosc_od_slonca[1]) #Merkury
 trace2 = sfery(promien[2],'#d23100',odleglosc_od_slonca[2]) #Venus
 trace3 = sfery(promien[3],'#325bff',odleglosc_od_slonca[3]) #Ziemia
-trace1f2 = sfery(promien[1],'#87877d',odleglosc_od_slonca[1],10)  
-trace2f2 = sfery(promien[2],'#d23100',odleglosc_od_slonca[2],10)    
-trace3f2 = sfery(promien[3],'#325bff',odleglosc_od_slonca[3],10)    
-    
+trace1f2 = sfery(promien[1],'#87877d',odleglosc_od_slonca[1],10)
+trace2f2 = sfery(promien[2],'#d23100',odleglosc_od_slonca[2],10)
+trace3f2 = sfery(promien[3],'#325bff',odleglosc_od_slonca[3],10)
+
     #tworzenie orbit:
 trace11 = orbity(odleglosc_od_slonca[1]-2) # Merkury
 trace12 = orbity(odleglosc_od_slonca[2]-2) #Venus
@@ -64,7 +63,7 @@ layout = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=0,r=0,t
                 "label": "Pause",
                 "method": "animate"}
                     ])])
-                
+
 
 fig = go.Figure(data = [trace0,trace1,trace11,trace2,trace12,trace3,trace13],
                 layout = layout,
@@ -73,4 +72,5 @@ fig = go.Figure(data = [trace0,trace1,trace11,trace2,trace12,trace3,trace13],
                         for k in range(0,155,5)])
 #fig.add_traces([trace11,trace12,trace13])
 #fig.update_traces(patch = dict(y = y+5),selector = dict(trace1,trace2,trace3))
-fig.show()
+#fig.show()
+fig.write_html('tmp.html', auto_open=True)
