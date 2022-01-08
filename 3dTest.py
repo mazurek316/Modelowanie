@@ -28,8 +28,6 @@ class Planeta:
         self.y_cords = self.rozmiar * np.outer(np.sin(phi), np.sin(theta)) + self.zmianay  # macierz współrzędnych y
         self.z_cords = 3+ self.rozmiar * np.outer(np.ones(15), np.cos(theta))
         Planeta = go.Surface(x=self.x_cords, y=self.y_cords, z=self.z_cords, colorscale=[[0, self.kolory], [1, self.kolory]])
-        self.srodek_x = self.x_cords[0][0]
-        self.srodek_y = self.y_cords[0][0]
         Planeta.update(showscale=False)
         return Planeta
 
@@ -51,7 +49,7 @@ class Planeta:
         return orbita
 
 
-def sila_grawitacji(cialo_1, cialo_2):
+def sila_grawitacji(cialo_1, cialo_2, x_1, y_1, x_2, y_2):
     G = scipy.constants.gravitational_constant
 
     dystanse = {'Merkury': 5.79 * np.power(10, 10, dtype='float64'),
@@ -64,15 +62,17 @@ def sila_grawitacji(cialo_1, cialo_2):
                      'Neptun': 4.4951 * np.power(10, 13, dtype='float64'),
                      'Pluton': 5.87 * np.power(10, 12, dtype='float64')}
 
-    poz_1 = np.array([cialo_1.x_dumper(), cialo_1.y_dumper(), 0])
-    poz_2 = np.array([cialo_2.x_dumper(), cialo_2.y_dumper(), 0])
+    #poz_1 = np.array([cialo_1.x_dumper(), cialo_1.y_dumper(), 0])
+    #poz_2 = np.array([cialo_2.x_dumper(), cialo_2.y_dumper(), 0])
+    poz_1 = np.array([x_1, y_1, 0])
+    poz_2 = np.array([x_2, y_2, 0])
     wektor = poz_1 - poz_2                                          # między ciałami
-    wektor_mag = np.linalg.norm(wektor)
+    wektor_mag = np.linalg.norm(wektor)                     # absolute(x)
     wersor = wektor / wektor_mag
 
     sila_mag = G * cialo_1.masa * cialo_2.masa / np.power(wektor_mag, 2, dtype="float64")
     sila_wektor = -sila_mag * wersor
-
+    print(poz_1)
     return sila_wektor
 
 
@@ -98,22 +98,20 @@ Orbita_Wenus = Wenus.Generacja_Orbity()
 zmiany_pozycji = {"Merkury":[],"Wenus":[],"Ziemia":[],"Mars":[],"Jowisz":[],"Saturn":[],"Uran":[],"Neptun":[]}
 
 #       #       #           #           #
-x0_ziemi = Ziemia.x_dumper()
-y0_ziemi = Ziemia.y_dumper()
 
-ped_ziemi = np.array([0, 15e19, 0])
+ped_ziemi = np.array([0, 16e19, 0])
 
 x_ziemi = 149
 y_ziemi = 0
 dt = 0.0001
 #       #       #           #           #
-for i in range(0, 100):
+erth_tmp = Planeta("Ziemia", promien[3], x_ziemi, "#10f2c3", 5.9742 * np.power(10, 15, dtype='float64'), y_ziemi)
+for i in range(0, 200):
     time = i * 2
 
-    erth_tmp = Planeta("Ziemia", promien[3], x_ziemi, "#10f2c3", 5.9742 * np.power(10, 15, dtype='float64'), y_ziemi)
-    wektor_sily_ziemi = sila_grawitacji(erth_tmp, Slonce_obliczeniowe)
-    print(ped_ziemi, wektor_sily_ziemi)
-    ped_ziemi = ped_ziemi + wektor_sily_ziemi * dt / erth_tmp.masa
+    wektor_sily_ziemi = sila_grawitacji(erth_tmp, Slonce_obliczeniowe, x_ziemi, y_ziemi, 0, 0)
+
+    ped_ziemi = ped_ziemi + wektor_sily_ziemi * dt
 
     x_merkury = odleglosc_od_slonca[1]*np.cos(0.829545454*np.pi * time + np.pi / 2)
     y_merkury = odleglosc_od_slonca[1]*np.sin(0.829545454*np.pi * time + np.pi / 2)
@@ -122,9 +120,10 @@ for i in range(0, 100):
     #print('kordy', x_ziemi, y_ziemi)
     #x_ziemi = odleglosc_od_slonca[3] * np.cos(0.2 * np.pi * time + np.pi / 2)
     #y_ziemi = odleglosc_od_slonca[3] * np.sin(0.2 * np.pi * time + np.pi / 2)
-    x_ziemi = x_ziemi + ped_ziemi[0] / erth_tmp.masa * dt
-    y_ziemi = y_ziemi + ped_ziemi[1] / erth_tmp.masa * dt
 
+    #print(erth_tmp.odleglosc_od_slonca, y_ziemi)
+    x_ziemi = x_ziemi + (ped_ziemi[0] / erth_tmp.masa) * dt
+    y_ziemi = y_ziemi + (ped_ziemi[1] / erth_tmp.masa) * dt
 
     x_mars = odleglosc_od_slonca[4]*np.cos(0.106259098 * np.pi * time + np.pi / 2)
     y_mars = odleglosc_od_slonca[4] * np.sin(0.106259098 * np.pi * time + np.pi / 2)
@@ -136,8 +135,6 @@ for i in range(0, 100):
     y_uran = odleglosc_od_slonca[7] * np.sin(0.0004 * np.pi * time + np.pi / 2)
     x_neptun = odleglosc_od_slonca[8] * np.cos(0.0001 * np.pi * time + np.pi / 2)
     y_neptun = odleglosc_od_slonca[8] * np.sin(0.0001 * np.pi * time + np.pi / 2)
-
-    #print(x_ziemi,y_ziemi)
 
     merkury_tmp = Planeta("Merkury",promien[1],x_merkury,'#87877d', 3.302 * np.power(10, 14, dtype='float64'), y_merkury)
     wenus_tmp = Planeta("Wenus",promien[2],x_wenus,'#d23100', 4.8685 * np.power(10, 15, dtype='float64'), y_wenus)
@@ -158,7 +155,7 @@ for i in range(0, 100):
     zmiany_pozycji["Neptun"].append(neptun_tmp.Generacja_Planety())
 
 klatki = []
-for i in range(0, 100):
+for i in range(0, 200):
     klatki.append(go.Frame(data=[Slonce,zmiany_pozycji["Merkury"][i],
                                  zmiany_pozycji["Wenus"][i],
                                  zmiany_pozycji["Ziemia"][i],
@@ -166,7 +163,8 @@ for i in range(0, 100):
                                  zmiany_pozycji["Jowisz"][i],
                                  zmiany_pozycji["Saturn"][i],
                                  zmiany_pozycji["Uran"][i],
-                                 zmiany_pozycji["Neptun"][i]]))
+                                 zmiany_pozycji["Neptun"][i]
+                                 ]))
 
 
 
