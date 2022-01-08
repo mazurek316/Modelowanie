@@ -39,9 +39,30 @@ class Planeta:
         xcord = []
         ycord = []
         zcord = []
-
+        ped_ziemi = np.array([0, 16e19, 0])
+        dt = 0.0001
+        x_ziemi = 149
+        y_ziemi = 0
+        erth_tmp = Planeta("Ziemia", promien[3], x_ziemi, "#10f2c3", 5.9742 * np.power(10, 15, dtype='float64'), y_ziemi)
         # Obliczanie koordynatow
+        if self.nazwa == "Ziemia":
+            for i in range(0, 361):  # dla każdego stopnia
+                wektor_sily_ziemi = sila_grawitacji(erth_tmp, Slonce_obliczeniowe, x_ziemi, y_ziemi, 0, 0)
+
+                ped_ziemi = ped_ziemi + wektor_sily_ziemi * dt
+                x_ziemi = x_ziemi + (ped_ziemi[0] / erth_tmp.masa) * dt
+                y_ziemi = y_ziemi + (ped_ziemi[1] / erth_tmp.masa) * dt
+                xcord = xcord + [x_ziemi]
+                ycord = ycord + [y_ziemi]
+                zcord = zcord + [3]
+            orbita = go.Scatter3d(x=xcord, y=ycord, z=zcord, marker=dict(size=0.1), line=dict(color=clr, width=wdth))
+            return orbita
         for i in range(0, 361):  # dla każdego stopnia
+            wektor_sily_ziemi = sila_grawitacji(erth_tmp, Slonce_obliczeniowe, x_ziemi, y_ziemi, 0, 0)
+
+            ped_ziemi = ped_ziemi + wektor_sily_ziemi * dt
+            x_ziemi = x_ziemi + (ped_ziemi[0] / erth_tmp.masa) * dt
+            y_ziemi = y_ziemi + (ped_ziemi[1] / erth_tmp.masa) * dt
             xcord = xcord + [(round(np.cos(math.radians(i)), 5)) * self.odleglosc_od_slonca + offset]
             ycord = ycord + [(round(np.sin(math.radians(i)), 5)) * self.odleglosc_od_slonca]
             zcord = zcord + [3]
@@ -72,7 +93,7 @@ def sila_grawitacji(cialo_1, cialo_2, x_1, y_1, x_2, y_2):
 
     sila_mag = G * cialo_1.masa * cialo_2.masa / np.power(wektor_mag, 2, dtype="float64")
     sila_wektor = -sila_mag * wersor
-    print(poz_1)
+    #print(poz_1)
     return sila_wektor
 
 
@@ -138,7 +159,7 @@ for i in range(0, 200):
 
     merkury_tmp = Planeta("Merkury",promien[1],x_merkury,'#87877d', 3.302 * np.power(10, 14, dtype='float64'), y_merkury)
     wenus_tmp = Planeta("Wenus",promien[2],x_wenus,'#d23100', 4.8685 * np.power(10, 15, dtype='float64'), y_wenus)
-
+    ziemia_tmp = Planeta("Ziemia",promien[3],x_ziemi,kolory_planet[3],5.9742 * np.power(10, 15, dtype='float64'), y_ziemi)
     mars_tmp = Planeta("Mars",promien[4],x_mars,kolory_planet[4], 6.4185 * np.power(10, 14, dtype='float64'), y_mars)
     jowisz_tmp = Planeta("Jowisz",promien[5],x_jowisz,kolory_planet[5], 1.899 * np.power(10, 18, dtype='float64'), y_jowisz)
     saturn_tmp = Planeta("Saturn", promien[6], x_saturn, kolory_planet[6], 5.6846 * np.power(10, 17, dtype='float64'), y_saturn)
@@ -147,7 +168,7 @@ for i in range(0, 200):
     #print(x_wenus,y_wenus)
     zmiany_pozycji["Merkury"].append(merkury_tmp.Generacja_Planety())
     zmiany_pozycji["Wenus"].append(wenus_tmp.Generacja_Planety())
-    zmiany_pozycji["Ziemia"].append(erth_tmp.Generacja_Planety())
+    zmiany_pozycji["Ziemia"].append(ziemia_tmp.Generacja_Planety())
     zmiany_pozycji["Mars"].append(mars_tmp.Generacja_Planety())
     zmiany_pozycji["Jowisz"].append(jowisz_tmp.Generacja_Planety())
     zmiany_pozycji["Saturn"].append(saturn_tmp.Generacja_Planety())
@@ -156,14 +177,14 @@ for i in range(0, 200):
 
 klatki = []
 for i in range(0, 200):
-    klatki.append(go.Frame(data=[Slonce,zmiany_pozycji["Merkury"][i],
-                                 zmiany_pozycji["Wenus"][i],
+    klatki.append(go.Frame(data=[Slonce,#zmiany_pozycji["Merkury"][i],
+                                # zmiany_pozycji["Wenus"][i],
                                  zmiany_pozycji["Ziemia"][i],
-                                 zmiany_pozycji["Mars"][i],
-                                 zmiany_pozycji["Jowisz"][i],
-                                 zmiany_pozycji["Saturn"][i],
-                                 zmiany_pozycji["Uran"][i],
-                                 zmiany_pozycji["Neptun"][i]
+                                 #zmiany_pozycji["Mars"][i],
+                                 #zmiany_pozycji["Jowisz"][i],
+                                 #zmiany_pozycji["Saturn"][i],
+                                 #zmiany_pozycji["Uran"][i],
+                                 #zmiany_pozycji["Neptun"][i]
                                  ]))
 
 
