@@ -27,7 +27,7 @@ class Planeta:
         self.x_cords = self.odleglosc_od_slonca + self.rozmiar * np.outer(np.cos(phi), np.sin(theta)) # macierz współrzędnych x
         self.y_cords = self.rozmiar * np.outer(np.sin(phi), np.sin(theta)) + self.zmianay  # macierz współrzędnych y
         self.z_cords = 3+ self.rozmiar * np.outer(np.ones(15), np.cos(theta))
-        Planeta = go.Surface(x=self.x_cords, y=self.y_cords, z=self.z_cords, colorscale=[[0, self.kolory], [1, self.kolory]])
+        Planeta = go.Surface(x=self.x_cords, y=self.y_cords, z=self.z_cords, colorscale=[[0, self.kolory], [1, self.kolory]],hovertext=f'nazwa = {str(self.nazwa)},<br> rozmiar = {str(self.rozmiar)} <br> odleglosc od slonca = {str(self.odleglosc_od_slonca)}')
         Planeta.update(showscale=False)
         return Planeta
 
