@@ -194,7 +194,7 @@ for i in range(0, 200):
                                  #zmiany_pozycji["Uran"][i],
                                  #zmiany_pozycji["Neptun"][i]
                                  ]))
-print(zmiany_pozycji["Ziemia_trail"])
+
 
 
 
