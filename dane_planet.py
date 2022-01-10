@@ -49,6 +49,8 @@ ped = {'Merkury': np.array([0, predkosci['Merkury'] * masy['Merkury'], 0]),
               'Neptun': np.array([0, predkosci['Neptun'] * masy['Neptun'], 0])}
 
 #       #       #           #           #
+#       #       #           #           #
+"""
 dt = 0.0001
 
 # merkury
@@ -105,6 +107,7 @@ for i in range(0, 200):
     # wenus
     wenus_tmp = Planeta("Wenus", promien[2], x_wenus, '#d23100', 4.8685 * np.power(10, 15, dtype='float64'), y_wenus)
     wektor_sily_wenus = sila_grawitacji(wenus_tmp, Slonce_obliczeniowe, x_wenus, y_wenus, 0, 0)
+    ped_wenus = ped_wenus + wektor_sily_wenus * dt
     x_wenus = x_wenus + (ped_wenus[0] / wenus_tmp.masa) * dt
     y_wenus = y_wenus + (ped_wenus[1] / wenus_tmp.masa) * dt
 
@@ -118,29 +121,35 @@ for i in range(0, 200):
     # mars
     mars_tmp = Planeta("Mars", promien[4], x_mars, kolory_planet[4], 6.4185 * np.power(10, 14, dtype='float64'), y_mars)
     wektor_sily_mars = sila_grawitacji(mars_tmp, Slonce_obliczeniowe, x_mars, y_mars, 0, 0)
+    ped_mars = ped_mars + wektor_sily_mars * dt
     x_mars = x_mars + (ped_mars[0] / mars_tmp.masa) * dt
     y_mars = y_mars + (ped_mars[1] / mars_tmp.masa) * dt
 
     # jowisz
     jowisz_tmp = Planeta("Jowisz", promien[5], x_jowisz, kolory_planet[5], 1.899 * np.power(10, 18, dtype='float64'), y_jowisz)
     wektor_sily_jowisz = sila_grawitacji(jowisz_tmp, Slonce_obliczeniowe, x_jowisz, y_jowisz, 0, 0)
+    ped_jowisz = ped_jowisz + wektor_sily_jowisz * dt
     x_jowisz = x_jowisz + (ped_jowisz[0] / jowisz_tmp.masa) * dt
     y_jowisz = y_jowisz + (ped_jowisz[1] / jowisz_tmp.masa) * dt
 
     # saturn
     saturn_tmp = Planeta("Saturn", promien[6], x_saturn, kolory_planet[6], 5.6846 * np.power(10, 17, dtype='float64'), y_saturn)
     wektor_sily_saturn = sila_grawitacji(saturn_tmp, Slonce_obliczeniowe, x_saturn, y_saturn, 0, 0)
+    ped_saturn = ped_saturn + wektor_sily_saturn * dt
     x_saturn = x_saturn + (ped_saturn[0] / saturn_tmp.masa) * dt
     y_saturn = y_saturn + (ped_saturn[1] / saturn_tmp.masa) * dt
 
     # uran
     uran_tmp = Planeta("Uran", promien[7], x_uran, kolory_planet[7], 8.6832 * np.power(10, 16, dtype='float64'), y_uran)
     wektor_sily_uran = sila_grawitacji(uran_tmp, Slonce_obliczeniowe, x_uran, y_uran, 0, 0)
+    ped_uran = ped_uran + wektor_sily_uran * dt
     x_uran = x_uran + (ped_uran[0] / uran_tmp.masa) * dt
     y_uran = y_uran + (ped_uran[1] / uran_tmp.masa) * dt
 
     # neptun
     neptun_tmp = Planeta("Neptun", promien[8], x_neptun, kolory_planet[8], 1.02430 * np.power(10, 17, dtype='float64'), y_neptun)
     wektor_sily_neptun = sila_grawitacji(neptun_tmp, Slonce_obliczeniowe, x_neptun, y_neptun, 0, 0)
+    ped_neptun = ped_neptun + wektor_sily_neptun * dt
     x_neptun = x_neptun + (ped_neptun[0] / neptun_tmp.masa) * dt
     y_neptun = y_neptun + (ped_neptun[1] / neptun_tmp.masa) * dt
+"""
