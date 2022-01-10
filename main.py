@@ -39,7 +39,7 @@ class Planeta:
         xcord = []
         ycord = []
         zcord = []
-        ped_ziemi = np.array([0, 1.8e20, 0])
+        ped_ziemi = np.array([0, 1.78e20, 0])
         dt = 0.0001
         x_ziemi = 149
         y_ziemi = 0
@@ -55,6 +55,7 @@ class Planeta:
                 xcord = xcord + [x_ziemi]
                 ycord = ycord + [y_ziemi]
                 zcord = zcord + [3]
+
             orbita = go.Scatter3d(x=xcord, y=ycord, z=zcord, marker=dict(size=0.1), line=dict(color=clr, width=wdth))
             return orbita
         for i in range(0, 361):  # dla każdego stopnia
@@ -66,16 +67,19 @@ class Planeta:
             xcord = xcord + [(round(np.cos(math.radians(i)), 5)) * self.odleglosc_od_slonca + offset]
             ycord = ycord + [(round(np.sin(math.radians(i)), 5)) * self.odleglosc_od_slonca]
             zcord = zcord + [3]
+
         orbita = go.Scatter3d(x=xcord, y=ycord, z=zcord, marker=dict(size=0.1), line=dict(color=clr, width=wdth))
         return orbita
+
+    def PlanetTrail(self,x_cords,y_cords,offset = 0,colour = 'black',wdth = 0.5,iteracje=3):
+        z_cords = [3 for z in range(iteracje)]
+        Trail = go.Scatter3d(x=x_cords,y=y_cords,z=z_cords,marker=dict(size=0.2),line=dict(color = colour,width = wdth))
+        return Trail
 
 
 def sila_grawitacji(cialo_1, cialo_2, x_1, y_1, x_2, y_2):
     G = scipy.constants.gravitational_constant
 
-
-    #poz_1 = np.array([cialo_1.x_dumper(), cialo_1.y_dumper(), 0])
-    #poz_2 = np.array([cialo_2.x_dumper(), cialo_2.y_dumper(), 0])
     poz_1 = np.array([x_1, y_1, 0])
     poz_2 = np.array([x_2, y_2, 0])
     wektor = poz_1 - poz_2                                          # między ciałami
@@ -105,19 +109,20 @@ Uran = Planeta("Uran",promien[7],odleglosc_od_slonca[7],kolory_planet[7], 8.6832
 Neptun = Planeta("Neptun",promien[8],odleglosc_od_slonca[8],kolory_planet[8], 1.02430 * np.power(10, 17, dtype='float64'), 0)
 
 
-zmiany_pozycji = {"Merkury":[],"Wenus":[],"Ziemia":[],"Mars":[],"Jowisz":[],"Saturn":[],"Uran":[],"Neptun":[]}
+zmiany_pozycji = {"Merkury":[],"Wenus":[],"Ziemia":[],"Mars":[],"Jowisz":[],"Saturn":[],"Uran":[],"Neptun":[],'Ziemia_trail':[],"Merkury_trail":[],"Wenus_trail":[]}
 
 #       #       #           #           #
 
-ped_ziemi = np.array([0, 1.7e20, 0])
+ped_ziemi = np.array([0, 1.78e20, 0])
 
 x_ziemi = 149.6
 y_ziemi = 0
 dt = 0.0001
+Trail_cords = {"Merkury":[[],[]],"Wenus":[[],[]],"Ziemia":[[],[]]}
 #       #       #           #           #
 erth_tmp = Planeta("Ziemia", promien[3], x_ziemi, "#10f2c3", 5.9742 * np.power(10, 15, dtype='float64'), y_ziemi)
 for i in range(0, 200):
-    time = i * 2
+    time = i * 0.02
 
     wektor_sily_ziemi = sila_grawitacji(erth_tmp, Slonce_obliczeniowe, x_ziemi, y_ziemi, 0, 0)
 
@@ -134,6 +139,13 @@ for i in range(0, 200):
     #print(erth_tmp.odleglosc_od_slonca, y_ziemi)
     x_ziemi = x_ziemi + (ped_ziemi[0] / erth_tmp.masa) * dt
     y_ziemi = y_ziemi + (ped_ziemi[1] / erth_tmp.masa) * dt
+    Trail_cords["Ziemia"][0].append(x_ziemi)
+    Trail_cords["Ziemia"][1].append(y_ziemi)
+    Trail_cords["Merkury"][0].append(x_merkury)
+    Trail_cords["Merkury"][1].append(y_merkury)
+    Trail_cords["Wenus"][0].append(x_wenus)
+    Trail_cords["Wenus"][1].append(y_wenus)
+
 
     x_mars = odleglosc_od_slonca[4]*np.cos(0.106259098 * np.pi * time + np.pi / 2)
     y_mars = odleglosc_od_slonca[4] * np.sin(0.106259098 * np.pi * time + np.pi / 2)
@@ -163,34 +175,42 @@ for i in range(0, 200):
     zmiany_pozycji["Saturn"].append(saturn_tmp.Generacja_Planety())
     zmiany_pozycji["Uran"].append(uran_tmp.Generacja_Planety())
     zmiany_pozycji["Neptun"].append(neptun_tmp.Generacja_Planety())
-
+    zmiany_pozycji["Ziemia_trail"].append(Ziemia.PlanetTrail(Trail_cords["Ziemia"][0],Trail_cords["Ziemia"][1],iteracje=i))
+    zmiany_pozycji["Merkury_trail"].append(Merkury.PlanetTrail(Trail_cords["Merkury"][0],Trail_cords["Merkury"][1],iteracje=i))
+    zmiany_pozycji["Wenus_trail"].append(Wenus.PlanetTrail(Trail_cords["Wenus"][0],Trail_cords["Wenus"][1],iteracje = i))
+#Trail1 = go.Scatter3d(x=[149.6,130],y=)
 klatki = []
+Ziemia.Generacja_Orbity()
 for i in range(0, 200):
-    klatki.append(go.Frame(data=[Slonce,#zmiany_pozycji["Merkury"][i],
-                                # zmiany_pozycji["Wenus"][i],
+    klatki.append(go.Frame(data=[Slonce,zmiany_pozycji["Merkury"][i],
+                                 zmiany_pozycji["Wenus"][i],
                                  zmiany_pozycji["Ziemia"][i],
+                                 zmiany_pozycji["Merkury_trail"][i],
+                                 zmiany_pozycji["Wenus_trail"][i],
+                                 zmiany_pozycji['Ziemia_trail'][i]
                                  #zmiany_pozycji["Mars"][i],
                                  #zmiany_pozycji["Jowisz"][i],
                                  #zmiany_pozycji["Saturn"][i],
                                  #zmiany_pozycji["Uran"][i],
                                  #zmiany_pozycji["Neptun"][i]
                                  ]))
+print(zmiany_pozycji["Ziemia_trail"])
 
 
 
 Planety_do_Układu = [Slonce,
                         Merkury.Generacja_Planety(),
                         Wenus.Generacja_Planety(),
-                        #Ziemia.Generacja_Planety(),
+                        Ziemia.Generacja_Planety(),
                         Mars.Generacja_Planety(),
                         Jowisz.Generacja_Planety(),
                         Saturn.Generacja_Planety(),
                         Uran.Generacja_Planety(),Neptun.Generacja_Planety()]
 
 
-Orbity_Planet = [Merkury.Generacja_Orbity()
-                ,Wenus.Generacja_Orbity(),
-                 Ziemia.Generacja_Orbity(),
+Orbity_Planet = [#Merkury.Generacja_Orbity()
+                #,Wenus.Generacja_Orbity(),
+                 #Ziemia.Generacja_Orbity(),
                  Mars.Generacja_Orbity(),
                  Jowisz.Generacja_Orbity(),
                  Saturn.Generacja_Orbity(),
@@ -215,4 +235,5 @@ lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=2,r=2,t=2,
 
 fig = go.Figure(data = Planety_do_Układu+Orbity_Planet,layout=lay, frames=klatki)
 
-fig.write_html('tmp.html', auto_open=False)
+#fig.write_html('tmp.html', auto_open=False)
+fig.show()
