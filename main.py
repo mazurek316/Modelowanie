@@ -39,7 +39,7 @@ class Planeta:
         xcord = []
         ycord = []
         zcord = []
-        ped_ziemi = np.array([0, 16e19, 0])
+        ped_ziemi = np.array([0, 1.8e20, 0])
         dt = 0.0001
         x_ziemi = 149
         y_ziemi = 0
@@ -73,15 +73,6 @@ class Planeta:
 def sila_grawitacji(cialo_1, cialo_2, x_1, y_1, x_2, y_2):
     G = scipy.constants.gravitational_constant
 
-    dystanse = {'Merkury': 5.79 * np.power(10, 10, dtype='float64'),
-                     'Wenus': 1.082 * np.power(10, 11, dtype='float64'),
-                     'Ziemia': 1.496 * np.power(10, 11, dtype='float64'),
-                     'Mars': 2.279 * np.power(10, 11, dtype='float64'),
-                     'Jowisz': 7.786 * np.power(10, 11, dtype='float64'),
-                     'Saturn': 1.4335 * np.power(10, 13, dtype='float64'),
-                     'Uran': 2.8725 * np.power(10, 13, dtype='float64'),
-                     'Neptun': 4.4951 * np.power(10, 13, dtype='float64'),
-                     'Pluton': 5.87 * np.power(10, 12, dtype='float64')}
 
     #poz_1 = np.array([cialo_1.x_dumper(), cialo_1.y_dumper(), 0])
     #poz_2 = np.array([cialo_2.x_dumper(), cialo_2.y_dumper(), 0])
@@ -113,16 +104,14 @@ Saturn = Planeta("Saturn",promien[6],odleglosc_od_slonca[6],kolory_planet[6], 5.
 Uran = Planeta("Uran",promien[7],odleglosc_od_slonca[7],kolory_planet[7], 8.6832 * np.power(10, 16, dtype='float64'), 0)
 Neptun = Planeta("Neptun",promien[8],odleglosc_od_slonca[8],kolory_planet[8], 1.02430 * np.power(10, 17, dtype='float64'), 0)
 
-Orbita_Ziemi = Ziemia.Generacja_Orbity()
-Orbita_Merkury = Merkury.Generacja_Orbity()
-Orbita_Wenus = Wenus.Generacja_Orbity()
+
 zmiany_pozycji = {"Merkury":[],"Wenus":[],"Ziemia":[],"Mars":[],"Jowisz":[],"Saturn":[],"Uran":[],"Neptun":[]}
 
 #       #       #           #           #
 
-ped_ziemi = np.array([0, 16e19, 0])
+ped_ziemi = np.array([0, 1.7e20, 0])
 
-x_ziemi = 149
+x_ziemi = 149.6
 y_ziemi = 0
 dt = 0.0001
 #       #       #           #           #
@@ -189,6 +178,25 @@ for i in range(0, 200):
 
 
 
+Planety_do_Układu = [Slonce,
+                        Merkury.Generacja_Planety(),
+                        Wenus.Generacja_Planety(),
+                        #Ziemia.Generacja_Planety(),
+                        Mars.Generacja_Planety(),
+                        Jowisz.Generacja_Planety(),
+                        Saturn.Generacja_Planety(),
+                        Uran.Generacja_Planety(),Neptun.Generacja_Planety()]
+
+
+Orbity_Planet = [Merkury.Generacja_Orbity()
+                ,Wenus.Generacja_Orbity(),
+                 Ziemia.Generacja_Orbity(),
+                 Mars.Generacja_Orbity(),
+                 Jowisz.Generacja_Orbity(),
+                 Saturn.Generacja_Orbity(),
+                 Uran.Generacja_Orbity(),Neptun.Generacja_Orbity()]
+
+
 lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=2,r=2,t=2,b=2),autosize=False,width=1920,height=1080,
     scene= dict(xaxis = dict(title = 'odleglosc od slonca',range = [-7000,7000],color = 'black'),
                 yaxis = dict(title = 'odleglosc od slonca',range = [-7000,7000],color = 'black'),
@@ -205,10 +213,6 @@ lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=2,r=2,t=2,
                 "method": "animate"}
                     ])])
 
-fig = go.Figure(data = [Slonce,Merkury.Generacja_Planety(),Wenus.Generacja_Planety(),
-                        Ziemia.Generacja_Planety(),Mars.Generacja_Planety(),
-                        Jowisz.Generacja_Planety(),Saturn.Generacja_Planety(),Uran.Generacja_Planety(),Neptun.Generacja_Planety(),
-                        Merkury.Generacja_Orbity(),Wenus.Generacja_Orbity(),Ziemia.Generacja_Orbity(),Mars.Generacja_Orbity(),Jowisz.Generacja_Orbity(),Saturn.Generacja_Orbity(),Uran.Generacja_Orbity(),Neptun.Generacja_Orbity()]
-                ,layout=lay, frames=klatki)
+fig = go.Figure(data = Planety_do_Układu+Orbity_Planet,layout=lay, frames=klatki)
 
 fig.write_html('tmp.html', auto_open=False)
