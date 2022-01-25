@@ -56,7 +56,7 @@ ped = {'Merkury': np.array([0, predkosci['Merkury'] * masy['Merkury'], 0]),
               'Mars': np.array([0, predkosci['Mars'] * masy['Mars'], 0]),
               'Jowisz': np.array([0, predkosci['Jowisz'] * masy['Jowisz'], 0]),
               'Saturn': np.array([0, predkosci['Saturn'] * masy['Saturn'], 0]),
-              'Uran': np.array([0, predkosci['Saturn'] * masy['Saturn'], 0]),
+              'Uran': np.array([0, predkosci['Uran'] * masy['Uran'], 0]),
               'Neptun': np.array([0, predkosci['Neptun'] * masy['Neptun'], 0])}
 
 

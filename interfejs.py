@@ -13,7 +13,7 @@ root.resizable(False, False)
 # deklaracje zmiennych
 # Słońce
 masa_slonce = tk.DoubleVar(root, 1.9891)
-masa_slonce_pot = tk.DoubleVar(root, 21)
+masa_slonce_pot = tk.IntVar(root, 21)
 
 # Merkury
 masa_merkury = tk.DoubleVar(root, 3.302)
@@ -57,7 +57,7 @@ predkosc_jowisz_pot = tk.IntVar(root, 4)
 
 # Saturn
 masa_saturn = tk.DoubleVar(root, 5.6846)
-masa_saturn_pot = tk.DoubleVar(root, 17)
+masa_saturn_pot = tk.IntVar(root, 17)
 dyst_saturn = tk.DoubleVar(root, 1.4335)
 dyst_saturn_pot = tk.IntVar(root, 12)
 predkosc_saturn = tk.DoubleVar(root, 9.8485)
@@ -65,7 +65,7 @@ predkosc_saturn_pot = tk.IntVar(root, 4)
 
 # Uran
 masa_uran = tk.DoubleVar(root, 8.6832)
-masa_uran_pot = tk.DoubleVar(root, 16)
+masa_uran_pot = tk.IntVar(root, 16)
 dyst_uran = tk.DoubleVar(root, 2.8725)
 dyst_uran_pot = tk.IntVar(root, 12)
 predkosc_uran = tk.DoubleVar(root, 6.8132)
@@ -73,7 +73,7 @@ predkosc_uran_pot = tk.IntVar(root, 4)
 
 # Neptun
 masa_neptun = tk.DoubleVar(root, 1.0243)
-masa_neptun_pot = tk.DoubleVar(root, 17)
+masa_neptun_pot = tk.IntVar(root, 17)
 dyst_neptun = tk.DoubleVar(root, 4.4951)
 dyst_neptun_pot = tk.IntVar(root, 12)
 predkosc_neptun = tk.DoubleVar(root, 5.4278)
