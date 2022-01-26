@@ -309,24 +309,9 @@ for i in range(0, 200):
                                  zmiany_pozycji["Neptun"][i],
                                  zmiany_pozycji["Neptun_trail"][i]
                                  ]))
-    slider_step = {"args": [
-        {"frame": {"duration": 30, "redraw": False},
-         "mode": "immediate",
-         "transition": {"duration": 30}}
-        ],
-        "label": i,
-        "method": "animate"}
-    sliders_dict["steps"].append(slider_step)
 
 
-
-
-
-
-
-
-
-Planety_do_Układu = [Slonce,
+Planety_do_Ukladu = [Slonce,
                         Merkury.Generacja_Planety(),
                         zmiany_pozycji["Merkury_trail"][0],
                         Wenus.Generacja_Planety(),
@@ -345,15 +330,6 @@ Planety_do_Układu = [Slonce,
                         zmiany_pozycji["Neptun_trail"][0]]
 
 
-Orbity_Planet = [#Merkury.Generacja_Orbity()
-                #,Wenus.Generacja_Orbity(),
-                 #Ziemia.Generacja_Orbity(),
-                 #Mars.Generacja_Orbity(),
-                 Jowisz.Generacja_Orbity(),
-                 Saturn.Generacja_Orbity(),
-                 Uran.Generacja_Orbity(),Neptun.Generacja_Orbity()]
-
-
 lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=0,r=0,t=0,b=0),autosize=True,
     scene= dict(xaxis = dict(title = 'odleglosc od slonca',range = [-10000,10000],color = 'black'),
                 yaxis = dict(title = 'odleglosc od slonca',range = [-10000,10000],color = 'black'),
@@ -370,6 +346,6 @@ lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=0,r=0,t=0,
                 "method": "animate"}
                     ])])
 
-fig = go.Figure(data = Planety_do_Układu,layout=lay, frames=klatki)
+fig = go.Figure(data = Planety_do_Ukladu,layout=lay, frames=klatki)
 fig["layout"]["sliders"] = [sliders_dict]
 fig.write_html('tmp.html', auto_open=False)
