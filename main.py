@@ -290,7 +290,7 @@ for i in range(0, 200):
 
 
 klatki = []
-
+sliders_dict = {"steps":[]}
 for i in range(0, 200):
     klatki.append(go.Frame(data=[Slonce,zmiany_pozycji["Merkury"][i],
                                  zmiany_pozycji["Merkury_trail"][i],
@@ -309,7 +309,14 @@ for i in range(0, 200):
                                  zmiany_pozycji["Neptun"][i],
                                  zmiany_pozycji["Neptun_trail"][i]
                                  ]))
-
+    slider_step = {"args": [
+        {"frame": {"duration": 30, "redraw": False},
+         "mode": "immediate",
+         "transition": {"duration": 30}}
+        ],
+        "label": i,
+        "method": "animate"}
+    sliders_dict["steps"].append(slider_step)
 
 
 
@@ -364,5 +371,5 @@ lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=0,r=0,t=0,
                     ])])
 
 fig = go.Figure(data = Planety_do_Układu,layout=lay, frames=klatki)
-
+fig["layout"]["sliders"] = [sliders_dict]
 fig.write_html('tmp.html', auto_open=False)
