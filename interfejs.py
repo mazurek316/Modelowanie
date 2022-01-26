@@ -6,7 +6,7 @@ from tkinter import messagebox
 # konfiguracja okna
 root = tk.Tk()
 root.title('Dane wejściowe')
-root.geometry("950x400")
+root.geometry("1150x400")
 root.resizable(False, False)
 
 
@@ -61,7 +61,7 @@ masa_saturn_pot = tk.IntVar(root, 17)
 dyst_saturn = tk.DoubleVar(root, 1.4335)
 dyst_saturn_pot = tk.IntVar(root, 12)
 predkosc_saturn = tk.DoubleVar(root, 9.8485)
-predkosc_saturn_pot = tk.IntVar(root, 4)
+predkosc_saturn_pot = tk.IntVar(root, 3)
 
 # Uran
 masa_uran = tk.DoubleVar(root, 8.6832)
@@ -69,7 +69,7 @@ masa_uran_pot = tk.IntVar(root, 16)
 dyst_uran = tk.DoubleVar(root, 2.8725)
 dyst_uran_pot = tk.IntVar(root, 12)
 predkosc_uran = tk.DoubleVar(root, 6.8132)
-predkosc_uran_pot = tk.IntVar(root, 4)
+predkosc_uran_pot = tk.IntVar(root, 3)
 
 # Neptun
 masa_neptun = tk.DoubleVar(root, 1.0243)
@@ -77,7 +77,7 @@ masa_neptun_pot = tk.IntVar(root, 17)
 dyst_neptun = tk.DoubleVar(root, 4.4951)
 dyst_neptun_pot = tk.IntVar(root, 12)
 predkosc_neptun = tk.DoubleVar(root, 5.4278)
-predkosc_neptun_pot = tk.IntVar(root, 4)
+predkosc_neptun_pot = tk.IntVar(root,3)
 
 # funkcje submit i walidacyjne
 def zmienione_dane():
@@ -193,9 +193,9 @@ def domyslne_dane():
                          'Ziemia': 4,
                          'Mars': 4,
                          'Jowisz': 4,
-                         'Saturn': 4,
-                         'Uran': 4,
-                         'Neptun': 4}
+                         'Saturn': 3,
+                         'Uran': 3,
+                         'Neptun': 3}
 
     return domyslne_masy, domyslne_masy_pot, domyslne_dyst, domyslne_dyst_pot, domyslne_pred, domyslne_pred_pot
 
@@ -229,7 +229,7 @@ def setflag():
 
 
 def jak_wprowadzac():
-    tekst = "Wprowadź wartości w notacji wykładniczej, maksymalna potęga liczby 10 to 25"
+    tekst = "Wprowadź wartości w notacji wykładniczej, potęgi liczby 10 muszą być liczbami między 0 a 25"
     messagebox.showinfo(title="Jak wprowadzać", message=tekst)
 
 # komendy sprawdzające wprowadzane wartości jako zapis podawany w Entry(validatecommand)
@@ -237,9 +237,9 @@ miedzy_0_1_cmd = root.register(miedzy_0_1)
 miedzy_0_25_cmd = root.register(miedzy_0_25)
 
 # etykiety
-label_MASY = tk.Label(root, text='MASY CIAŁ', font=('calibre', 20, 'bold'))
-label_ODLEGLOSC = tk.Label(root, text='DYSTANS DO SŁOŃCA', font=('calibre', 20, 'bold'))
-label_PREDKOSCI = tk.Label(root, text='PRĘDKOŚĆ STYCZNA', font=('calibre', 20, 'bold'))
+label_MASY = tk.Label(root, text='MASY CIAŁ [kg]', font=('calibre', 20, 'bold'))
+label_ODLEGLOSC = tk.Label(root, text='DYSTANS DO SŁOŃCA [m]', font=('calibre', 20, 'bold'))
+label_PREDKOSCI = tk.Label(root, text='PRĘDKOŚĆ STYCZNA [m/s]', font=('calibre', 20, 'bold'))
 label_0 = tk.Label(root, text='Słońce', font=('calibre', 12, 'bold'))
 label_1 = tk.Label(root, text='Merkury', font=('calibre', 12, 'bold'))
 label_2 = tk.Label(root, text='Wenus', font=('calibre', 12, 'bold'))
@@ -634,7 +634,7 @@ def_btn.grid(row=11, column=9, columnspan=2)
 inf_btn.grid(row=11, column=4, columnspan=3)
 
 
-messagebox.showinfo(title="Jak wprowadzać", message="Wprowadź wartości w notacji wykładniczej, maksymalna potęga liczby 10 to 25")
+messagebox.showinfo(title="Jak wprowadzać", message="Wprowadź wartości w notacji wykładniczej, potęgi liczby 10 muszą być liczbami między 0 a 25")
 masa_1_entry.focus_force()
 root.mainloop()
 
