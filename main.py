@@ -100,10 +100,10 @@ Saturn = Planeta("Saturn",promien[6],odleglosc_od_slonca[6],kolory_planet[6], da
 Uran = Planeta("Uran",promien[7],odleglosc_od_slonca[7],kolory_planet[7], dane_planet.masy['Uran'], 0)
 Neptun = Planeta("Neptun",promien[8],odleglosc_od_slonca[8],kolory_planet[8], dane_planet.masy['Neptun'], 0)
 
-zmiany_pozycji = {"Merkury":[],"Wenus":[],"Ziemia":[],"Mars":[],"Jowisz":[],"Saturn":[],"Uran":[],"Neptun":[],'Ziemia_trail':[],"Merkury_trail":[],"Wenus_trail":[]}
+zmiany_pozycji = {"Merkury":[],"Wenus":[],"Ziemia":[],"Mars":[],"Jowisz":[],"Saturn":[],"Uran":[],"Neptun":[],'Ziemia_trail':[],"Merkury_trail":[],"Wenus_trail":[],"Mars_trail":[],"Jowisz_trail":[],"Saturn_trail":[],"Uran_trail":[],"Neptun_trail":[]}
 
 #       #       #           #           #
-Trail_cords = {"Merkury":[[],[]],"Wenus":[[],[]],"Ziemia":[[],[]],"Ksiezyc":[[],[]]}
+Trail_cords = {"Merkury":[[],[]],"Wenus":[[],[]],"Ziemia":[[],[]],"Mars":[[],[]],"Jowisz":[[],[]],"Saturn":[[],[]],"Uran":[[],[]],"Neptun":[[],[]]}
 #       #       #           #           #       sekcja fizyczna, wartości wejściowe
 dt = 0.0001
 
@@ -257,6 +257,18 @@ for i in range(0, 200):
     Trail_cords["Merkury"][1].append(y_merkury)
     Trail_cords["Wenus"][0].append(x_wenus)
     Trail_cords["Wenus"][1].append(y_wenus)
+    Trail_cords["Mars"][0].append(x_mars)
+    Trail_cords["Mars"][1].append(y_mars)
+    Trail_cords["Jowisz"][0].append(x_jowisz)
+    Trail_cords["Jowisz"][1].append(y_jowisz)
+    Trail_cords["Saturn"][0].append(x_saturn)
+    Trail_cords["Saturn"][1].append(y_saturn)
+    Trail_cords["Uran"][0].append(x_uran)
+    Trail_cords["Uran"][1].append(y_uran)
+    Trail_cords["Neptun"][0].append(x_neptun)
+    Trail_cords["Neptun"][1].append(y_neptun)
+
+
 
     zmiany_pozycji["Merkury"].append(merkury_tmp.Generacja_Planety())
     zmiany_pozycji["Wenus"].append(wenus_tmp.Generacja_Planety())
@@ -269,53 +281,81 @@ for i in range(0, 200):
     zmiany_pozycji["Ziemia_trail"].append(Ziemia.PlanetTrail(Trail_cords["Ziemia"][0],Trail_cords["Ziemia"][1],iteracje=i))
     zmiany_pozycji["Merkury_trail"].append(Merkury.PlanetTrail(Trail_cords["Merkury"][0],Trail_cords["Merkury"][1],iteracje=i))
     zmiany_pozycji["Wenus_trail"].append(Wenus.PlanetTrail(Trail_cords["Wenus"][0],Trail_cords["Wenus"][1],iteracje = i))
+    zmiany_pozycji["Mars_trail"].append(Mars.PlanetTrail(Trail_cords["Mars"][0], Trail_cords["Mars"][1],iteracje=i))
+    zmiany_pozycji["Jowisz_trail"].append(Jowisz.PlanetTrail(Trail_cords["Jowisz"][0], Trail_cords["Jowisz"][1],iteracje=i))
+    zmiany_pozycji["Saturn_trail"].append(Saturn.PlanetTrail(Trail_cords["Saturn"][0], Trail_cords["Saturn"][1],iteracje=i))
+    zmiany_pozycji["Uran_trail"].append(Uran.PlanetTrail(Trail_cords["Uran"][0], Trail_cords["Uran"][1],iteracje=i))
+    zmiany_pozycji["Neptun_trail"].append(Neptun.PlanetTrail(Trail_cords["Neptun"][0], Trail_cords["Neptun"][1],iteracje=i))
+
+
 
 klatki = []
-Ziemia.Generacja_Orbity()
+
 for i in range(0, 200):
     klatki.append(go.Frame(data=[Slonce,zmiany_pozycji["Merkury"][i],
-                                 zmiany_pozycji["Wenus"][i],
-                                 zmiany_pozycji["Ziemia"][i],
                                  zmiany_pozycji["Merkury_trail"][i],
+                                 zmiany_pozycji["Wenus"][i],
                                  zmiany_pozycji["Wenus_trail"][i],
+                                 zmiany_pozycji["Ziemia"][i],
                                  zmiany_pozycji['Ziemia_trail'][i],
-                                 #zmiany_pozycji["Mars"][i],
-                                 #zmiany_pozycji["Jowisz"][i],
-                                 #zmiany_pozycji["Saturn"][i],
-                                 #zmiany_pozycji["Uran"][i],
-                                 #zmiany_pozycji["Neptun"][i]
+                                 zmiany_pozycji["Mars"][i],
+                                 zmiany_pozycji["Mars_trail"][i],
+                                 zmiany_pozycji["Jowisz"][i],
+                                 zmiany_pozycji["Jowisz_trail"][i],
+                                 zmiany_pozycji["Saturn"][i],
+                                 zmiany_pozycji["Saturn_trail"][i],
+                                 zmiany_pozycji["Uran"][i],
+                                 zmiany_pozycji["Uran_trail"][i],
+                                 zmiany_pozycji["Neptun"][i],
+                                 zmiany_pozycji["Neptun_trail"][i]
                                  ]))
+
+
+
+
+
+
+
 
 
 
 Planety_do_Układu = [Slonce,
                         Merkury.Generacja_Planety(),
+                        zmiany_pozycji["Merkury_trail"][0],
                         Wenus.Generacja_Planety(),
+                        zmiany_pozycji["Wenus_trail"][0],
                         Ziemia.Generacja_Planety(),
+                        zmiany_pozycji["Ziemia_trail"][0],
                         Mars.Generacja_Planety(),
+                        zmiany_pozycji["Mars_trail"][0],
                         Jowisz.Generacja_Planety(),
+                        zmiany_pozycji["Jowisz_trail"][0],
                         Saturn.Generacja_Planety(),
-                        Uran.Generacja_Planety(),Neptun.Generacja_Planety()]
+                        zmiany_pozycji["Saturn_trail"][0],
+                        Uran.Generacja_Planety(),
+                        zmiany_pozycji["Uran_trail"][0],
+                        Neptun.Generacja_Planety(),
+                        zmiany_pozycji["Neptun_trail"][0]]
 
 
 Orbity_Planet = [#Merkury.Generacja_Orbity()
                 #,Wenus.Generacja_Orbity(),
                  #Ziemia.Generacja_Orbity(),
-                 Mars.Generacja_Orbity(),
+                 #Mars.Generacja_Orbity(),
                  Jowisz.Generacja_Orbity(),
                  Saturn.Generacja_Orbity(),
                  Uran.Generacja_Orbity(),Neptun.Generacja_Orbity()]
 
 
-lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=2,r=2,t=2,b=2),autosize=False,width=1920,height=1080,
-    scene= dict(xaxis = dict(title = 'odleglosc od slonca',range = [-7000,7000],color = 'black'),
-                yaxis = dict(title = 'odleglosc od slonca',range = [-7000,7000],color = 'black'),
-                zaxis = dict(range = [-7000,7000],color = 'white')),
+lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=0,r=0,t=0,b=0),autosize=True,
+    scene= dict(xaxis = dict(title = 'odleglosc od slonca',range = [-10000,10000],color = 'black'),
+                yaxis = dict(title = 'odleglosc od slonca',range = [-10000,10000],color = 'black'),
+                zaxis = dict(range = [-10000,10000],color = 'white')),
                 updatemenus = [dict(
                     type = 'buttons',
                     buttons = [dict(label = 'Play',
                     method = 'animate',
-                    args = [None, {"frame": {"duration": 1, "redraw": True},"fromcurrent": True, "transition": {"duration": 0.2}}]),
+                    args = [None, {"frame": {"duration": 30, "redraw": True},"fromcurrent": True, "transition": {"duration": 5}}]),
                             {"args": [[None], {"frame": {"duration": 0, "redraw": True},
                                   "mode": "immediate",
                                   "transition": {"duration": 0}}],
@@ -323,6 +363,6 @@ lay = go.Layout(title = "Proto-Układ",showlegend=False,margin=dict(l=2,r=2,t=2,
                 "method": "animate"}
                     ])])
 
-fig = go.Figure(data = Planety_do_Układu+Orbity_Planet,layout=lay, frames=klatki)
+fig = go.Figure(data = Planety_do_Układu,layout=lay, frames=klatki)
 
 fig.write_html('tmp.html', auto_open=False)
